@@ -395,20 +395,9 @@ void bcm2835_delay(unsigned int millis)
 void bcm2835_delayMicroseconds(uint64_t micros)
 {
     struct timespec t1;
-    uint64_t        start;
-	
-    // Calling nanosleep() takes at least 100-200 us, so use it for
-    // long waits and use a busy wait on the System Timer for the rest.
-    start =  bcm2835_st_read();
-    
-    if (micros > 450)
-    {
-	t1.tv_sec = 0;
-	t1.tv_nsec = 1000 * (long)(micros - 200);
-	nanosleep(&t1, NULL);
-    }    
-  
-    bcm2835_st_delay(start, micros);
+    t1.tv_sec = 0;
+    t1.tv_nsec = 1000 * (long)(micros);
+    nanosleep(&t1, NULL);
 }
 
 //
